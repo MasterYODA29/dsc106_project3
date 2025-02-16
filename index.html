@@ -5,13 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project 3 Visualization</title>
     <link href="style.css" rel="stylesheet" >
+     <script src="data.js"></script>
     <script src="global.js" type="module"></script>  
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <!--if need legend:-->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.13.0/d3-legend.js"></script> -->
 </head>
 <body> 
-    <h1>Project 3 Visualization</h1>
+    <h1>BIS vs Time Bin</h1>
+    <div id="line-chart"></div>
 
+    <label for="age">Age Group:</label>
+    <input type="text" id="age" placeholder="40-49"><br>
+
+    <label for="weight">Weight Group:</label>
+    <input type="text" id="weight" placeholder="60-74"><br>
+
+    <label for="height">Height Group:</label>
+    <input type="text" id="height" placeholder="150-159"><br>
+
+    <button>Generate Graph</button>
 </body>  
 </html> 
