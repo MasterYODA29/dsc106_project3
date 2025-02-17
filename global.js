@@ -133,14 +133,31 @@ function updateGraph() {
        .attr("stroke", "steelblue") // line color
        .attr("stroke-width", 2);  
 
-    // Add points
-    svg.selectAll("dot")
+    // Add points/tooltips
+    const tooltip = d3.select("#tooltip");
+    svg.selectAll("circle")
        .data(data)
        .enter().append("circle")
        .attr("cx", d => x(d.timeBin))
        .attr("cy", d => y(d.bis))
        .attr("r", 3)
-       .attr("fill", "steelblue");
+       .attr("fill", "steelblue")
+       .on("mouseover", function(event, d) {
+        d3.select(this).attr("fill", "orange").attr("r", 6); //enelarge/recolor on hover
+        tooltip.transition()
+               .duration(200)
+               .style("opacity", .9);
+        tooltip.html(`Time: ${d.timeBin}<br>BIS: ${d.bis.toFixed(2)}`)
+               .style("left", (event.pageX + 5) + "px")
+               .style("top", (event.pageY - 28) + "px");
+    })
+    .on("mouseout", function() {
+        d3.select(this).attr("fill", "steelblue").attr("r", 3); //reset to original size and color
+        tooltip.transition()
+               .duration(500)
+               .style("opacity", 0);
+    });
+       
 }
 
 document.getElementById('age').addEventListener('input', updateGraph);
