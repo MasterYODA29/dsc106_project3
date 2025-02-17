@@ -49,6 +49,12 @@ function getBisData(age, weight, height) {
     return bisData[key];
 }
 
+// Function to calculate average BIS
+function calculateAverageBIS(data) {
+    const totalBIS = data.reduce((sum, d) => sum + d.bis, 0);
+    return totalBIS / data.length;
+}
+
 // Function to update the graph
 function updateGraph() {
     const ageInput = document.getElementById('age').value;
@@ -132,6 +138,19 @@ function updateGraph() {
        .attr("fill", "none") // ensures no fill under
        .attr("stroke", "steelblue") // line color
        .attr("stroke-width", 2);  
+    
+    // Calculate average BIS
+    const averageBIS = calculateAverageBIS(data);
+
+    // Add average BIS line
+    svg.append("line")
+       .attr("x1", 0)
+       .attr("x2", width)
+       .attr("y1", y(averageBIS))
+       .attr("y2", y(averageBIS))
+       .attr("stroke", "red")
+       .attr("stroke-width", 2)
+       .attr("stroke-dasharray", "4 4"); // dashed line
 
     // Add points/tooltips
     const tooltip = d3.select("#tooltip");
