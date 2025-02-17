@@ -12,18 +12,26 @@
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.13.0/d3-legend.js"></script> -->
 </head>
 <body> 
-    <h1>BIS vs Time Bin</h1>
+    <h1>The Impact of Age, Weight, and Height on Anesthesia Depth During Surgery</h1>
+
+    <div>
+        <label for="ageSlider">Age:</label>
+        <input type="range" id="age" min="20" max="79" step="1" value="20">
+        <span id="ageValue">20</span>
+    </div>
+
+    <div>
+        <label for="weightSlider">Weight (kg):</label>
+        <input type="range" id="weight" min="45" max="89" step="1" value="45">
+        <span id="weightValue">45</span>
+    </div>
+
+    <div>
+        <label for="heightSlider">Height (cm):</label>
+        <input type="range" id="height" min="150" max="179" step="1" value="150">
+        <span id="heightValue">150</span>
+    </div>
+
     <div id="line-chart"></div>
-
-    <label for="age">Age Group:</label>
-    <input type="text" id="age" placeholder="40-49"><br>
-
-    <label for="weight">Weight Group:</label>
-    <input type="text" id="weight" placeholder="60-74"><br>
-
-    <label for="height">Height Group:</label>
-    <input type="text" id="height" placeholder="150-159"><br>
-
-    <button>Generate Graph</button>
 </body>  
 </html> 

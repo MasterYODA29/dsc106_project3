@@ -2,7 +2,50 @@ console.log('IT’S ALIVE!');
 
 // Get data from bisData
 function getBisData(age, weight, height) {
-    const key = `${age}_${weight}_${height}`;
+    let age_range = "";
+    let weight_range = "";
+    let height_range = "";
+
+    // find age range
+    if (age >= 20 && age <= 29) {
+        age_range = "20-29";
+    } else if (age >= 30 && age <= 39) {
+        age_range = "30-39";
+    } else if (age >= 40 && age <= 49) {
+        age_range = "40-49";
+    } else if (age >= 50 && age <= 59) {
+        age_range = "50-59";
+    } else if (age >= 60 && age <= 69) {
+        age_range = "60-69";
+    } else if (age >= 70 && age <= 79) {
+        age_range = "70-79";
+    } else {
+        console.log('Age out of range');
+    }
+    
+    // find weight range
+    if (weight >= 45 && weight <= 59) {
+        weight_range = "45-59";
+    } else if (weight >= 60 && weight <= 74) {
+        weight_range = "60-74";
+    } else if (weight >= 75 && weight <= 89) {
+        weight_range = "75-89";
+    } else {
+        console.log('Weight out of range');
+    }
+
+    // find height range
+    if (height >= 150 && height <= 159) {
+        height_range = "150-159";
+    } else if (height >= 160 && height <= 169) {
+        height_range = "160-169";
+    } else if (height >= 170 && height <= 179) {
+        height_range = "170-179";
+    } else {
+        console.log('Height out of range');
+    }
+
+    const key = `${age_range}_${weight_range}_${height_range}`;
     return bisData[key];
 }
 
@@ -11,6 +54,11 @@ function updateGraph() {
     const ageInput = document.getElementById('age').value;
     const weightInput = document.getElementById('weight').value;
     const heightInput = document.getElementById('height').value;
+
+    // Update the value labels
+    document.getElementById('ageValue').textContent = ageInput;
+    document.getElementById('weightValue').textContent = weightInput;
+    document.getElementById('heightValue').textContent = heightInput;
 
     const data = getBisData(ageInput, weightInput, heightInput);
 
@@ -28,7 +76,7 @@ function updateGraph() {
           height = 400 - margin.top - margin.bottom;
 
     // Append SVG object
-    const svg = d3.select("body")
+    const svg = d3.select("#line-chart")
                   .append("svg")
                   .attr("width", width + margin.left + margin.right)
                   .attr("height", height + margin.top + margin.bottom)
@@ -50,28 +98,28 @@ function updateGraph() {
                 .domain([0, d3.max(data, d => d.bis)])
                 .range([height, 0]);
 
-    // Add X axis
+    // Add x-axis
     const xAxis = svg.append("g")
                      .attr("transform", `translate(0,${height})`)
                      .call(d3.axisBottom(x));
 
-    // Add Y axis
+    // Add y-axis
     const yAxis = svg.append("g")
                      .call(d3.axisLeft(y));
 
-    // Add X axis label
+    // Add x-axis label
     svg.append("text")
        .attr("transform", `translate(${width / 2}, ${height + margin.bottom - 10})`)
        .style("text-anchor", "middle")
-       .text("Time (%)");  // X axis label
+       .text("Time");  // X axis label
 
-    // Add Y axis label
+    // Add y-axis label
     svg.append("text")
        .attr("transform", "rotate(-90)")
        .attr("y", -margin.left + 20)
        .attr("x", -height / 2)
        .style("text-anchor", "middle")
-       .text("BIS");  // Y axis label
+       .text("BIS (alertness)");  // Y axis label
 
     // Add line
     svg.append("path")
@@ -95,5 +143,9 @@ function updateGraph() {
        .attr("fill", "steelblue");
 }
 
-// Attach updateGraph function to the button
-document.querySelector('button').addEventListener('click', updateGraph);
+document.getElementById('age').addEventListener('input', updateGraph);
+document.getElementById('weight').addEventListener('input', updateGraph);
+document.getElementById('height').addEventListener('input', updateGraph);
+
+// Initial graph update on page load
+updateGraph();
