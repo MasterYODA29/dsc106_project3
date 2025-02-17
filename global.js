@@ -72,8 +72,8 @@ function updateGraph() {
 
     // Set dimensions and margins
     const margin = {top: 20, right: 30, bottom: 50, left: 50},
-          width = 800 - margin.left - margin.right,
-          height = 400 - margin.top - margin.bottom;
+          width = 900 - margin.left - margin.right,
+          height = 450 - margin.top - margin.bottom;
 
     // Append SVG object
     const svg = d3.select("#line-chart")
@@ -111,7 +111,7 @@ function updateGraph() {
     svg.append("text")
        .attr("transform", `translate(${width / 2}, ${height + margin.bottom - 10})`)
        .style("text-anchor", "middle")
-       .text("Time");  // X axis label
+       .text("Time (% of surgery)");  // x-axis label
 
     // Add y-axis label
     svg.append("text")
@@ -119,7 +119,7 @@ function updateGraph() {
        .attr("y", -margin.left + 20)
        .attr("x", -height / 2)
        .style("text-anchor", "middle")
-       .text("BIS (alertness)");  // Y axis label
+       .text("BIS (alertness)");  // y-axis label
 
     // Add line
     svg.append("path")

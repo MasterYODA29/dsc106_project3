@@ -14,26 +14,26 @@
 <body> 
     <h1>The Impact of Age, Weight, and Height on Anesthesia Depth During Surgery</h1>
 
-    <div>
-        <label for="ageSlider">Age:</label>
-        <input type="range" id="age" min="20" max="79" step="1" value="20">
-        <span id="ageValue">20</span>
+    <h2>Relationship between Bispectral Index (BIS) and time during an operation where the BIS measures the depth of anesthesia. Shows how anesthesia levels change over time depending on age, weight, and height.</h2>
+
+    <div class="container">
+        <div class="slider-container">
+            <label for="ageSlider">Age:</label>
+            <input type="range" id="age" min="20" max="79" step="1" value="20">
+            <span id="ageValue">20</span>
+
+            <label for="weightSlider">Weight (kg):</label>
+            <input type="range" id="weight" min="45" max="89" step="1" value="45">
+            <span id="weightValue">45</span>
+
+            <label for="heightSlider">Height (cm):</label>
+            <input type="range" id="height" min="150" max="179" step="1" value="150">
+            <span id="heightValue">150</span>
+        </div>
+    
+        <div id="line-chart"></div>
     </div>
-
-    <div>
-        <label for="weightSlider">Weight (kg):</label>
-        <input type="range" id="weight" min="45" max="89" step="1" value="45">
-        <span id="weightValue">45</span>
-    </div>
-
-    <div>
-        <label for="heightSlider">Height (cm):</label>
-        <input type="range" id="height" min="150" max="179" step="1" value="150">
-        <span id="heightValue">150</span>
-    </div>
-
-    <div id="line-chart"></div>
-
+    
     <div id="tooltip" class="tooltip" style="opacity: 0;"></div>
 </body>  
 </html> 
