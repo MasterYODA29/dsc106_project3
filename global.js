@@ -73,21 +73,64 @@ function updateGraph() {
         return;
     }
 
-    // Clear existing SVG
-    d3.select("svg").remove();
-
     // Set dimensions and margins
     const margin = {top: 20, right: 30, bottom: 50, left: 50},
           width = 900 - margin.left - margin.right,
           height = 450 - margin.top - margin.bottom;
 
-    // Append SVG object
-    const svg = d3.select("#line-chart")
-                  .append("svg")
-                  .attr("width", width + margin.left + margin.right)
-                  .attr("height", height + margin.top + margin.bottom)
-                  .append("g")
-                  .attr("transform", `translate(${margin.left},${margin.top})`);
+    // Select the SVG element, if it exists
+    let svg = d3.select("#line-chart svg");
+
+    // If the SVG element doesn't exist, create it
+    if (svg.empty()) {
+        svg = d3.select("#line-chart")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        // Add x-axis
+        svg.append("g")
+           .attr("class", "x-axis")
+           .attr("transform", `translate(0,${height})`);
+
+        // Add y-axis
+        svg.append("g")
+           .attr("class", "y-axis");
+
+        // Add x-axis label
+        svg.append("text")
+           .attr("class", "x-axis-label")
+           .attr("transform", `translate(${width / 2}, ${height + margin.bottom - 10})`)
+           .style("text-anchor", "middle")
+           .text("Time (% of surgery)");
+
+        // Add y-axis label
+        svg.append("text")
+           .attr("class", "y-axis-label")
+           .attr("transform", "rotate(-90)")
+           .attr("y", -margin.left + 20)
+           .attr("x", -height / 2)
+           .style("text-anchor", "middle")
+           .text("BIS (alertness)");
+
+        // Add line path
+        svg.append("path")
+           .attr("class", "line")
+           .attr("fill", "none")
+           .attr("stroke", "steelblue")
+           .attr("stroke-width", 2);
+
+        // Add average BIS line
+        svg.append("line")
+           .attr("class", "average-line")
+           .attr("stroke", "red")
+           .attr("stroke-width", 2)
+           .attr("stroke-dasharray", "4 4");
+    } else {
+        svg = svg.select("g");
+    }
 
     // Parse the data
     data.forEach(d => {
@@ -104,79 +147,80 @@ function updateGraph() {
                 .domain([0, d3.max(data, d => d.bis)])
                 .range([height, 0]);
 
-    // Add x-axis
-    const xAxis = svg.append("g")
-                     .attr("transform", `translate(0,${height})`)
-                     .call(d3.axisBottom(x));
+    // Update x-axis
+    svg.select(".x-axis")
+       .transition()
+       .duration(750)
+       .call(d3.axisBottom(x));
 
-    // Add y-axis
-    const yAxis = svg.append("g")
-                     .call(d3.axisLeft(y));
+    // Update y-axis
+    svg.select(".y-axis")
+       .transition()
+       .duration(750)
+       .call(d3.axisLeft(y));
 
-    // Add x-axis label
-    svg.append("text")
-       .attr("transform", `translate(${width / 2}, ${height + margin.bottom - 10})`)
-       .style("text-anchor", "middle")
-       .text("Time (% of surgery)");  // x-axis label
-
-    // Add y-axis label
-    svg.append("text")
-       .attr("transform", "rotate(-90)")
-       .attr("y", -margin.left + 20)
-       .attr("x", -height / 2)
-       .style("text-anchor", "middle")
-       .text("BIS (alertness)");  // y-axis label
-
-    // Add line
-    svg.append("path")
+    // Update line path
+    svg.select(".line")
        .datum(data)
-       .attr("class", "line")
+       .transition()
+       .duration(750)
        .attr("d", d3.line()
                     .x(d => x(d.timeBin))
                     .y(d => y(d.bis))
-       )
-       .attr("fill", "none") // ensures no fill under
-       .attr("stroke", "steelblue") // line color
-       .attr("stroke-width", 2);  
-    
+       );
+
     // Calculate average BIS
     const averageBIS = calculateAverageBIS(data);
 
-    // Add average BIS line
-    svg.append("line")
+    // Update average BIS line
+    svg.select(".average-line")
+       .transition()
+       .duration(750)
        .attr("x1", 0)
        .attr("x2", width)
        .attr("y1", y(averageBIS))
-       .attr("y2", y(averageBIS))
-       .attr("stroke", "red")
-       .attr("stroke-width", 2)
-       .attr("stroke-dasharray", "4 4"); // dashed line
+       .attr("y2", y(averageBIS));
 
-    // Add points/tooltips
+    // Update points/tooltips
     const tooltip = d3.select("#tooltip");
-    svg.selectAll("circle")
-       .data(data)
-       .enter().append("circle")
-       .attr("cx", d => x(d.timeBin))
-       .attr("cy", d => y(d.bis))
-       .attr("r", 3)
-       .attr("fill", "steelblue")
-       .on("mouseover", function(event, d) {
-        d3.select(this).attr("fill", "orange").attr("r", 6); //enelarge/recolor on hover
-        tooltip.transition()
-               .duration(200)
-               .style("opacity", .9);
-        tooltip.html(`Time: ${d.timeBin}<br>BIS: ${d.bis.toFixed(2)}`)
-               .style("left", (event.pageX + 5) + "px")
-               .style("top", (event.pageY - 28) + "px");
-    })
-    .on("mouseout", function() {
-        d3.select(this).attr("fill", "steelblue").attr("r", 3); //reset to original size and color
-        tooltip.transition()
-               .duration(500)
-               .style("opacity", 0);
-    });
-       
+    const circles = svg.selectAll("circle")
+                       .data(data);
+
+    circles.enter().append("circle")
+           .attr("cx", d => x(d.timeBin))
+           .attr("cy", d => y(d.bis))
+           .attr("r", 3)
+           .attr("fill", "steelblue")
+           .on("mouseover", function(event, d) {
+                d3.select(this)
+                  .transition()
+                  .duration(200)
+                  .attr("fill", "orange")
+                  .attr("r", 6); // Enlarge/recolor on hover
+                tooltip.transition()
+                       .duration(200)
+                       .style("opacity", .9);
+                tooltip.html(`Time: ${d.timeBin}<br>BIS: ${d.bis.toFixed(2)}`)
+                       .style("left", (event.pageX + 5) + "px")
+                       .style("top", (event.pageY - 28) + "px");
+            })
+           .on("mouseout", function() {
+                d3.select(this)
+                  .transition()
+                  .duration(300)
+                  .attr("fill", "steelblue")
+                  .attr("r", 3); // Reset to original size and color
+                tooltip.transition()
+                       .duration(500)
+                       .style("opacity", 0);
+            });
+
+    circles.transition()
+           .duration(750)
+           .attr("cx", d => x(d.timeBin))
+           .attr("cy", d => y(d.bis));
+
+    circles.exit().remove();
 }
 
 document.getElementById('age').addEventListener('input', updateGraph);
