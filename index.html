@@ -39,7 +39,49 @@
     <div id="tooltip" class="tooltip" style="opacity: 0;"></div>
     <h3>The Rationale and Process</h3>
     <p>
-        The Writeup, Stuff and Things about the Visualization and our work process.
+        We chose a line plot of the patient/case BIS data over the timespan of the surgery cases. We allowed for a flexible slider that allowed for personal customization and adjustments for different BMI combinations, as well as a tooltip to allow the user to hover and see the exact values each point corresponded to.
+    </p>
+
+    <h3>Data Wrangling and Implementation</h3>
+    
+    <p>
+        The process first involved Iman working on some exploratory data analysis and data wrangling regarding the anesthesia dataset. After extracting the data from the API provided on the website, the tracks dataset was pulled, which allows for the pulling of the BIS data by key. Once that was loaded in, different categories were formed across constant weight, age, and height increments, with the data taking on aggregated values within these bins to discretize the BIS graph, and allowing for more representative visualizations. Finally, the binned BIS Data are stored in a nested JSON file, and the data processing steps are complete.
+    </p>
+    
+    <p>
+        Using the data uploaded and extracted from the API that Imangeldi preprocessed, I decided to try to apply a gradient on random custom images of human silhouettes for different body types. I applied a custom cool-warm gradient while applying a radial map to calculate the distance of each point within the image as an array, and then used Matplotlib's FuncAnimation to create an animation of how this gradient would evolve (for 1 case) based on the BIS values. I scrapped the idea because timewise it would have been more difficult to include on D3.
+    </p>
+
+    <p>
+        Leah uploaded and created some containers for the actual graphic/visualization by using the output vis_final function from the notebook to obtain the actual JSON data for the BIS data, and transferred the data over to the data.js file containing the nested JSON data according to BMI indices, and then used D3 to create SVG circle elements and line paths for each data point, creating the axes, as well as parsing the data to convert the string data type in the JSON file into numeric data that D3 can plot.
+    </p>
+
+    <p>
+        Edgar added transition style selection rules to make the transition as the slider was dragged for the BIS plot to look smoother by varying the transition time and other stylization rules for the container of the slider and graph. He also implemented a tooltip for hovering over each circle graphic, which would enlarge the dot and turn it orange, as well as display the exact time proportion and BIS value, as well as an average dotted line for the entire BIS values.
+    </p>
+
+    <h3>Project Workflow</h3>
+    <p>
+        We had one large meeting with all members present to discuss our dataset and visualization approach. After narrowing down to two options, we chose the Anesthesia data because it provided a strong mix of interesting patterns and a feasible implementation within our timeline. I followed up with Imangeldi to discuss variables to track, binning and categorization strategies, and how the dataset would be structured.
+    </p>
+
+    <p>
+        Later Imangeldi, Leah, and Edgar had a virtual meeting  to go over data integration in D3, setting up the containers, sliders, and tooltips. After finalizing the visualizations, we reviewed the live website and made final adjustments before completing this writeup.
+    </p>
+
+    <p><strong>Time Contributions:</strong> Each group member contributed approximately 8-10+ hours to the project.</p>
+
+    <h3>Visual Encoding and Illustrative Design</h3>
+    <p>
+        From the start, we wanted the user to interact personally with the visualization in an engaging and informative way. We followed medical visualization conventions by allowing patient-centric biometrics to be entered through sliders. Initially, I proposed a gradient-based visualization across different body types, but we decided a line plot of BIS data would be clearer.
+    </p>
+
+    <p>
+        To improve readability, we discretized the continuous BIS waveform into binned time segments, preventing visual clutter. A red dashed line representing the average BIS value was included to serve as a reference point, helping users interpret anesthesia depth changes across different BMI categories.
+    </p>
+
+    <p>
+        The transitions were fine-tuned to be smooth yet fast enough to allow comparison between BMI indices, preventing sudden disruptions. We also dynamically adjusted the axis scale so that users wouldn't have to shift their focus drastically when toggling between data sets.
     </p>
     </body>  
 </html> 
