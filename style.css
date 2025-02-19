@@ -26,6 +26,31 @@ h2 {
     width: 80%;
 }
 
+/* Legend */
+.legend {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.legend-line {
+    width: 40px;
+    height: 2px;
+    margin-right: 5px;
+    border-top-width: 2px;
+}
+
+.legend-label {
+    font-size: 14px;
+}
+
 /* Container for the sliders and graph */
 .container {
     width: 700%;

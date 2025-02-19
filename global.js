@@ -221,6 +221,31 @@ function updateGraph() {
            .attr("cy", d => y(d.bis));
 
     circles.exit().remove();
+
+    // Add legend
+    const legend = d3.select("#legend");
+    legend.html(""); // Clear existing legend
+
+    const legendData = [
+        {label: "BIS (Lower is less awake)", color: "steelblue", dasharray: "none"},
+        {label: "Average BIS", color: "red", dasharray: "4 4"} // Updated dasharray, makes line dashed
+    ];
+
+    const legendItems = legend.selectAll(".legend-item")
+                              .data(legendData)
+                              .enter().append("div")
+                              .attr("class", "legend-item");
+
+    legendItems.append("div")
+               .attr("class", "legend-line")
+               .style("width", "40px")
+               .style("height", "0")
+               .style("border-top", d => `2px solid ${d.color}`)
+               .style("border-top-style", d => d.dasharray === "none" ? "solid" : "dashed");
+
+    legendItems.append("div")
+               .attr("class", "legend-label")
+               .text(d => d.label);
 }
 
 document.getElementById('age').addEventListener('input', updateGraph);
