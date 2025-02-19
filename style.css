@@ -26,6 +26,14 @@ h2 {
     width: 80%;
 }
 
+p {
+    text-align: left;
+    margin-top: 0;
+    margin-bottom: 1.5em;
+    color: #444;
+    width: 80%;
+}
+
 /* Legend */
 .legend {
     margin-top: 20px;
